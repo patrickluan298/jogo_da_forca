@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void cadastroJogadores(int pontos, char nome[20]) {
+void salvarJogadorRanking(int pontos, char nome[20]) {
     
     FILE* arquivo;
 

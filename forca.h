@@ -8,13 +8,13 @@
 #include "ranking.c"
 
 void menu();
-void abertura();
-int escolheTema(int numLetras);
-void escolhePalavra(char temaEscolhido[20]);
-void chuta();
-int letraExiste(char letra);
-int jaChutou(char letra);
-int chutesErrados();
-int ganhou();
-int enforcou();
-void desenhaForca();
+void abertura(int *qntJogadores, int *qntLetras);
+void escolheTema(char *tema, int numLetras);
+void escolhePalavra(char *temaEscolhido, char *palavraSecreta);
+void chuta(char *palavraSecreta, char *chutes, int *qntChutesDados);
+int letraExiste(char *palavraSecreta, char letra);
+int verificaLetraNaPalavra(char letra, char *chutes);
+int calculaChutesErrados(char *palavraSecreta, char *chutes);
+int ganhou(char *palavraSecreta, char *chutes);
+int enforcou(char *palavraSecreta, char *chutes);
+void desenhaForca(char *palavraSecreta, char *chutes);

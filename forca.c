@@ -1,18 +1,14 @@
 #include "forca.h"
 
-// Variáveis globais
-char palavraSecreta[10], temaEscolhido[20], chutes[26];
-int numJogadores, numLetras, chutesDados = 0;
-
-struct jogadores {
+typedef struct  {
     char nome[20];
     int pontos;
-};
-struct jogadores jogadores;
+}stJogadores;
 
-void nomeJogadores() {
+void nomeJogadores(char *nome) {
     printf("Nome do jogador: ");
-    scanf("%s", jogadores.nome);
+    scanf("%s", nome);
+    return;
 }
 
 void menu() {
@@ -28,7 +24,7 @@ void menu() {
         printf("[3] - Cadastrar palavra\n");
         printf("[4] - Créditos\n");
         printf("[0] - Sair\n");
-        printf("Escolha o tema: ");
+        printf("Escolha a opcao: ");
         scanf("%d", &escolha);
 
         switch(escolha){
@@ -56,27 +52,27 @@ void menu() {
     } while(escolha != 0 && escolha != 1 && escolha != 2 && escolha != 3 && escolha != 4);
 }
 
-void abertura() {
+void abertura(int *qntJogadores, int *qntLetras) {
     do{
         printf("Número de jogadores: ");
-        scanf("%d", &numJogadores);
+        scanf("%d", qntJogadores);
 
-        if(numJogadores < 1 || numJogadores > 10)
+        if(*qntJogadores < 1 || *qntJogadores > 10)
             printf("\nOpção Inválida! Tente Novamente\n");
 
-    } while(numJogadores < 1 || numJogadores > 10);
+    } while(*qntJogadores < 1 || *qntJogadores > 10);
 
     do{
         printf("Escolha a quantidade de letras (5, 6, 7): ");
-        scanf("%d", &numLetras);
+        scanf("%d", qntLetras);
 
-        if(numLetras != 5 && numLetras!= 6 && numLetras != 7)
+        if(*qntLetras != 5 && *qntLetras!= 6 && *qntLetras != 7)
             printf("\nOpção Inválida! Tente Novamente\n");
 
-    } while(numLetras != 5 && numLetras!= 6 && numLetras != 7);
+    } while(*qntLetras != 5 && *qntLetras!= 6 && *qntLetras != 7);
 }
 
-int escolheTema(int numLetras) {
+void escolheTema(char *tema, int numLetras) {
     int escolha;
 
     do {
@@ -90,40 +86,42 @@ int escolheTema(int numLetras) {
         switch (escolha) {
             case 1:
                 if(numLetras == 5)
-                    strcpy(temaEscolhido, "temas/animais5L.txt");     // strcpy(): Armazena uma string numa variável string
+                    strcpy(tema, "temas/animais5L.txt");     // strcpy(): Armazena uma string numa variável string
                 else if(numLetras == 6)
-                    strcpy(temaEscolhido, "temas/animais6L.txt");
+                    strcpy(tema, "temas/animais6L.txt");
                 else if(numLetras == 7)
-                    strcpy(temaEscolhido, "temas/animais7L.txt");
+                    strcpy(tema, "temas/animais7L.txt");
                 break;
             case 2:
                 if(numLetras == 5)
-                    strcpy(temaEscolhido, "temas/frutas5L.txt");
+                    strcpy(tema, "temas/frutas5L.txt");
                 else if(numLetras == 6)
-                    strcpy(temaEscolhido, "temas/frutas6L.txt");
+                    strcpy(tema, "temas/frutas6L.txt");
                 else if(numLetras == 7)
-                    strcpy(temaEscolhido, "temas/frutas7L.txt");
+                    strcpy(tema, "temas/frutas7L.txt");
                 break;
             case 3:
                 if(numLetras == 5)
-                    strcpy(temaEscolhido, "temas/objetos5L.txt");
+                    strcpy(tema, "temas/objetos5L.txt");
                 else if(numLetras == 6)
-                    strcpy(temaEscolhido, "temas/objetos6L.txt");
+                    strcpy(tema, "temas/objetos6L.txt");
                 else if(numLetras == 7)
-                    strcpy(temaEscolhido, "temas/objetos7L.txt");
+                    strcpy(tema, "temas/objetos7L.txt");
                 break;  
             default:
                 printf("Opção inválida! Tente novamente\n\n");
         }
     } while(escolha != 1 && escolha != 2 && escolha != 3);
+
+    return;
 }
 
-void escolhePalavra(char temaEscolhido[20]) {
+void escolhePalavra(char *tema, char *palavraSecreta) {
     int i, qtdDePalavras, randomico;
     
     FILE* arquivo;
 
-    arquivo = fopen(temaEscolhido, "r");    // Abre o arquivo com base na escolha do usuário
+    arquivo = fopen(tema, "r");    // Abre o arquivo com base na escolha do usuário
     if(arquivo == 0) {
         printf("Banco de dados de palavras não disponível\n\n");
         exit(1);
@@ -141,24 +139,25 @@ void escolhePalavra(char temaEscolhido[20]) {
     fclose(arquivo);
 }
 
-void chuta() {
+void chuta(char *palavraSecreta, char *chutes, int *qntChutesDados) {
     char chute;
 
     printf("Qual a letra? ");
     scanf(" %c", &chute);
     chute = toupper(chute);
 
-    if(letraExiste(chute)) {
+    if(letraExiste(palavraSecreta, chute)) {
         printf("Você acertou! A palavra tem a letra '%c'\n\n", chute);
     } else {
         printf("\nVocê errou! A palavra não tem a letra '%c'\n\n", chute);
     }
 
-    chutes[chutesDados] = chute;
-    chutesDados++;
+    chutes[*qntChutesDados] = chute;
+    (*qntChutesDados)++;
+    return;
 }
 
-int letraExiste(char letra) {
+int letraExiste(char *palavraSecreta, char letra) {
     for(int j = 0; j < strlen(palavraSecreta); j++) {
         if(letra == palavraSecreta[j]) {
             return 1;
@@ -167,9 +166,9 @@ int letraExiste(char letra) {
     return 0;
 }
 
-int jaChutou(char letra) {
+int verificaLetraNaPalavra(char letra, char *chutes) {
     int achou = 0;
-    for(int j = 0; j < chutesDados; j++) {
+    for(int j = 0; j < strlen(chutes); j++) {
         if(chutes[j] == letra) {
             achou = 1;
             break;
@@ -178,37 +177,31 @@ int jaChutou(char letra) {
     return achou;
 }
 
-int chutesErrados() {
+int calculaChutesErrados(char *palavraSecreta, char *chutes) {
     int pontos = 5;
 
-    printf("ENTROU NO CHUTES ERRADOS\n");
-
-    for(int i = 0; i < chutesDados; i++) {
-        if(!letraExiste(chutes[i])) {
+    for(int i = 0; i < strlen(chutes); i++)
+        if(!letraExiste(palavraSecreta, chutes[i]))
             pontos--;
-            printf("PONTOS INTERNO: %d\n", pontos);
-        }
-    }
 
-    printf("PONTOS: %d\n", pontos);
     return pontos;
 }
 
-int ganhou() {
+int ganhou(char *palavraSecreta, char *chutes) {
     for(int i = 0; i < strlen(palavraSecreta); i++) {
-        if(!jaChutou(palavraSecreta[i])) {
+        if(!verificaLetraNaPalavra(palavraSecreta[i], chutes)) {
             return 0;
         }
     }
     return 1;
 }
 
-int enforcou() {
-    return chutesErrados() == 0;
+int enforcou(char *palavraSecreta, char *chutes) {
+    return calculaChutesErrados(palavraSecreta, chutes) == 0;
 }
 
-void desenhaForca() {
-    int pontos = chutesErrados();
+void desenhaForca(char *palavraSecreta, char *chutes) {
+    int pontos = calculaChutesErrados(palavraSecreta, chutes);
 
     printf("  _______       \n");
     printf(" |/      |      \n");
@@ -221,73 +214,93 @@ void desenhaForca() {
     printf("\n\n");
 
     for(int i = 0; i < strlen(palavraSecreta); i++) {       // strlen(): Calcula a quantidade de caracteres de uma string
-        if(jaChutou(palavraSecreta[i])) {
+        if(verificaLetraNaPalavra(palavraSecreta[i], chutes)) {
             printf("%c ", palavraSecreta[i]);
         } else {
             printf("_ ");
         }
     }
+
     printf("\n");
+    return;
+}
+
+void imprimirVencedor(char *palavraSecreta){
+    printf("       ___________      \n");
+    printf("      '._==_==_=_.'     \n");
+    printf("      .-\\:      /-.    Parabéns, você ganhou!\n");
+    printf("     | (|:.     |) |    \n");
+    printf("      '-|:.     |-'    A palavra era %s.\n", palavraSecreta);
+    printf("        \\::.    /      \n");
+    printf("         '::. .'        \n");
+    printf("           ) (          \n");
+    printf("         _.' '._        \n");
+    printf("        '-------'       \n\n");
+}
+
+void imprimirPerdedor(char *palavraSecreta){
+    printf("          ⠀⠀⢀⡤⠄⠒⠒⠢⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀     \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⢞⠏⠀⠀⠀⠀⠀⠀⠈⢢⠀⠀⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡎⡎⢀⠄⠀⣀⠀⠀⣀⠀⠄⡇⠀⠀⠀⠀⠀⠀⠀  \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⢃⢂⣴⣿⣿⡧⢸⣿⣷⢨⠃⠀⠀⠀⠀⠀⠀⠀⠀  \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⠂⠙⢿⣿⣷⡾⡛⠋⢪⠀⠀⠀⠀⠀⠀⠀⠀   Oh não, você foi enforcado!\n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⢺⣧⣀⣀⣠⣿⠒⠋⠀⠀⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠉⠻⠿⠋⠉⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀   A palavra era %s.\n", palavraSecreta);
+    printf(" ⠀⢶⣤⣄⣶⠀⠀⠀⠀⠀⢀⣤⣾⣶⣶⡶⢾⣷⢶⡟⡆⠀⠀⢰⣀⣤⣤⠄   \n");
+    printf(" ⠐⢛⣿⣿⡿⣤⣄⡀⠀⡀⢊⢼⢽⡿⢿⢹⠷⠶⠝⡷⠜⠄⣀⢸⣿⣿⡻⠃   \n");
+    printf(" ⠀⠻⠋⠀⠁⠒⠠⠭⢇⡐⠁⠘⠩⣬⠛⣶⣇⠐⣿⠁⠘⢮⣕⠜⠁⠀⠁⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠉⢁⡿⠛⢉⡄⡹⠀⠀⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⠦⠀⠀⡀⠀⢺⠳⠤⠄⢤⡀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢎⠜⠒⠉⠈⠁⠉⢉⣩⢏⣾⠇⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣋⣎⠀⠀⠀⠀⡤⣤⢟⠟⠁⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢴⠺⣄⠀⠀⠀⠀⢸⡑⡁⠀⠀⠀⠀⠀⠀⠀⠀  \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠡⣙⠢⡄⠀⠀⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⢗⢻⠝⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀   \n");
+    printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠮⠕⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   \n\n");
+}
+
+void iniciarForca(int qntLetras){
+    char tema[20] = "", palavraSecreta[10] = "", chutes[26] = "";
+    int qntChutesDados = 0;
+    stJogadores jogadores;
+
+    memset(&jogadores, 0, sizeof(stJogadores));
+
+    escolheTema(tema, qntLetras);
+    escolhePalavra(tema, palavraSecreta);
+    nomeJogadores(jogadores.nome);
+    
+    do {
+        desenhaForca(palavraSecreta, chutes);
+        chuta(palavraSecreta, chutes, &qntChutesDados);
+
+    } while (!ganhou(palavraSecreta, chutes) && !enforcou(palavraSecreta, chutes));
+
+    if(ganhou(palavraSecreta, chutes)) 
+        imprimirVencedor(palavraSecreta);
+    else
+        imprimirPerdedor(palavraSecreta);
+
+    jogadores.pontos = calculaChutesErrados(palavraSecreta, chutes);
+    salvarJogadorRanking(jogadores.pontos, jogadores.nome);
+    return;
 }
 
 int main() {
-    int i, opcao;
+    int jogadorDaVez = 0, qntJogadores = 0, qntLetras = 0;
 
-    menu();
-    abertura();
+    while(1){
+        menu();
+        abertura(&qntJogadores, &qntLetras);
 
-    for(i = 0; i < numJogadores; i++){
-        if(i > 0){
-            printf("\nPróximo jogador\n");
+        for(jogadorDaVez = 1; jogadorDaVez <= qntJogadores; jogadorDaVez++){
+            
+            iniciarForca(qntLetras);
+
+            if(jogadorDaVez != qntJogadores)
+                printf("\nPróximo jogador\n");
         }
-        escolheTema(numLetras);
-        escolhePalavra(temaEscolhido);
-        nomeJogadores();
-        
-        do {
-            desenhaForca();
-            chuta();
-
-        } while (!ganhou() && !enforcou());
-
-        if(ganhou()) {
-            printf("       ___________      \n");
-            printf("      '._==_==_=_.'     \n");
-            printf("      .-\\:      /-.    Parabéns, você ganhou!\n");
-            printf("     | (|:.     |) |    \n");
-            printf("      '-|:.     |-'    A palavra era %s.\n", palavraSecreta);
-            printf("        \\::.    /      \n");
-            printf("         '::. .'        \n");
-            printf("           ) (          \n");
-            printf("         _.' '._        \n");
-            printf("        '-------'       \n\n");
-
-        }else{
-            printf("          ⠀⠀⢀⡤⠄⠒⠒⠢⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀     \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⢞⠏⠀⠀⠀⠀⠀⠀⠈⢢⠀⠀⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡎⡎⢀⠄⠀⣀⠀⠀⣀⠀⠄⡇⠀⠀⠀⠀⠀⠀⠀  \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⢃⢂⣴⣿⣿⡧⢸⣿⣷⢨⠃⠀⠀⠀⠀⠀⠀⠀⠀  \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⠂⠙⢿⣿⣷⡾⡛⠋⢪⠀⠀⠀⠀⠀⠀⠀⠀   Oh não, você foi enforcado!\n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⢺⣧⣀⣀⣠⣿⠒⠋⠀⠀⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠉⠻⠿⠋⠉⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀   A palavra era %s.\n", palavraSecreta);
-            printf(" ⠀⢶⣤⣄⣶⠀⠀⠀⠀⠀⢀⣤⣾⣶⣶⡶⢾⣷⢶⡟⡆⠀⠀⢰⣀⣤⣤⠄   \n");
-            printf(" ⠐⢛⣿⣿⡿⣤⣄⡀⠀⡀⢊⢼⢽⡿⢿⢹⠷⠶⠝⡷⠜⠄⣀⢸⣿⣿⡻⠃   \n");
-            printf(" ⠀⠻⠋⠀⠁⠒⠠⠭⢇⡐⠁⠘⠩⣬⠛⣶⣇⠐⣿⠁⠘⢮⣕⠜⠁⠀⠁⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠉⢁⡿⠛⢉⡄⡹⠀⠀⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⠦⠀⠀⡀⠀⢺⠳⠤⠄⢤⡀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢎⠜⠒⠉⠈⠁⠉⢉⣩⢏⣾⠇⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣋⣎⠀⠀⠀⠀⡤⣤⢟⠟⠁⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢴⠺⣄⠀⠀⠀⠀⢸⡑⡁⠀⠀⠀⠀⠀⠀⠀⠀  \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠡⣙⠢⡄⠀⠀⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⢗⢻⠝⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀   \n");
-            printf(" ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠮⠕⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   \n\n");
-        }
-        chutesDados = 0;
-
-        jogadores.pontos = chutesErrados();
-        cadastroJogadores(jogadores.pontos, jogadores.nome);
     }
-    menu();
 
     return(0);
 }

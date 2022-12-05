@@ -3,8 +3,23 @@ PONTOS	-  NOMES
   5	-  Bianca
   5	-  Ryan
   5	-  Thomas
-1;jackson;
-
   5	-  Jackson
   5	-  Jack
   5	-  Jack1
+  5	-  ter
+  5	-  ter1
+  5	-  ter2
+  5	-  ter3
+  5	-  ter4
+  3	-  ter9
+  4	-  ter10
+  0	-  Patrick
+  0	-  pat1
+  0	-  pat1
+  0	-  pat2
+  0	-  pat3
+  0	-  pat4
+  0	-  pat5
+  0	-  Pat5
+  3	-  poi
+  2	-  jackTer
