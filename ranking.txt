@@ -1,0 +1,10 @@
+PONTOS	-  NOMES
+  5	-  Patrick
+  5	-  Bianca
+  5	-  Ryan
+  5	-  Thomas
+1;jackson;
+
+  5	-  Jackson
+  5	-  Jack
+  5	-  Jack1
