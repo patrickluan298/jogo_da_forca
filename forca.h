@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include "creditos/creditos.c"
 #include "cadastraPalavra.c"
-#include "ranking.c"
+#include "ranking/ranking.c"
 
 void menu();
 void abertura(int *qntJogadores, int *qntLetras);

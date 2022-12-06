@@ -5,7 +5,7 @@ void salvarJogadorRanking(int pontos, char nome[20]) {
     
     FILE* arquivo;
 
-    arquivo = fopen("ranking.txt", "r+");
+    arquivo = fopen("ranking/ranking.txt", "r+");
 
     fseek(arquivo, 0, SEEK_END);
 
@@ -20,7 +20,7 @@ void verRanking() {
 
     FILE* arquivo;
 
-    arquivo = fopen("ranking.txt", "r");
+    arquivo = fopen("ranking/ranking.txt", "r");
     if(arquivo == 0) {
         printf("Banco de dados de palavras não disponível\n\n");
         exit(1);
