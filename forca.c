@@ -24,7 +24,7 @@ void menu() {
         printf("[3] - Cadastrar palavra\n");
         printf("[4] - Créditos\n");
         printf("[0] - Sair\n");
-        printf("Escolha a opcao: ");
+        printf("Escolha a opção: ");
         scanf("%d", &escolha);
 
         switch(escolha){
