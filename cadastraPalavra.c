@@ -13,7 +13,7 @@ void adicionaPalavra(char *tema, char *novaPalavra) {
     fseek(arquivo, 0, SEEK_SET);                        // Aponto a seta para o inicio do arquivo e sobrescrevo a qnt
     fprintf(arquivo, "%d", qnt);
 
-    fseek(arquivo, 0, SEEK_END);                        // Aponto a seta para o fim do arquivo e adiciono a nova palavr
+    fseek(arquivo, 0, SEEK_END);                        // Aponto a seta para o fim do arquivo e adiciono a nova palavra
     if(fprintf(arquivo, "\n%s", novaPalavra))
         printf("\nPalavra cadastrada com sucesso!\n\n");
     else
